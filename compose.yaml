@@ -3,21 +3,29 @@ services:
     build:
       context: .
       dockerfile: Server/Dockerfile
+
     ports:
       - "5000:5000"
-      - "7055:7055"
+
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:7055;http://+:5000
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:5000
+
+    restart: unless-stopped
 
   client:
     build:
-      context: .
-      dockerfile: Client/Dockerfile
+      context: ./Client
+      dockerfile: Dockerfile
+
     ports:
       - "8080:3100"
+
     environment:
-      - NODE_ENV=production
-      - PORT=3100
+      NODE_ENV: production
+      PORT: 3100
+
     depends_on:
       - backend
+
+    restart: unless-stopped
